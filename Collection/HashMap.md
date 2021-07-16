@@ -21,7 +21,7 @@ Collection Studying 4 -- HashMap
 4) hashtable和hashmap区别
 5) 1.8 hashmap底层put过程
 
-​	    									<img src="C:\Users\18160\Desktop\YW\JAVA\put.jpg" style="zoom: 33%;" />
+​	    								<img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\Collection\put.jpg" style="zoom:33%;" />
 
 6) 说一下hashmap扩容机制
 
@@ -29,7 +29,7 @@ Collection Studying 4 -- HashMap
 
 ​     2)   然后，遍历原哈希表的所有元素，并且重新哈希到新表相应的桶中
 
-​                                 <img src="C:\Users\18160\Desktop\YW\JAVA\resize.jpg" style="zoom: 50%;" />
+​                                <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\Collection\resize.jpg" style="zoom: 50%;" />
 
 7) Linkedhashmap，treemap为什么有序，查找时间复杂度
 8) hashmap和b树有何异同，为什么数据库一般使用b树来当索引
