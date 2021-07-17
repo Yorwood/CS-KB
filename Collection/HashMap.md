@@ -19,9 +19,36 @@ Collection Studying 4 -- HashMap
    2) 便于扩容时，快速重哈希，只需将旧桶元素重新分到两个桶
 
 4) hashtable和hashmap区别
-5) 1.8 hashmap底层put过程
+
+​    1）HashMap是非线程安全的, HashTable是线程安全的；HashTable的方法经过了synchronized
+
+​	     修饰；
+
+​	2）HashMap效率高，HashMap因为保证线程安全效率低
+
+​	3）HashMap 对Null key做了单独存储，且value值可为null；HashTable不支持Null  key Null      	 	 value；
+
+​	4）HashMap默认初始容量16，HashTable为11，扩容HashMap为两倍，HashTable为2n+1；
+
+​    5) HashMap有红黑树，HashTable无该机制；
+
+
+
+5) 1.8 hashmap底层put过程  get过程
+
+​		put
 
 ​	    								<img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\Collection\put.jpg" style="zoom:33%;" />
+
+​			get:
+
+​					1）判断哈希表是否为空、根据(hash & n-1）判断对应桶是否为空
+
+​					2) 检查第一个元素是否相等
+
+​					3）判断当前是否是树形还是链表，树形则进入树形搜索
+
+​					4）链表则进行遍历检查	
 
 6) 说一下hashmap扩容机制
 
@@ -33,6 +60,9 @@ Collection Studying 4 -- HashMap
 
 7) Linkedhashmap，treemap为什么有序，查找时间复杂度
 8) hashmap和b树有何异同，为什么数据库一般使用b树来当索引
+
+​	  待看完Mysql来填坑
+
 9) 1.8和以前有什么不一样
 
 ​     1）hash计算1.7四次扰动，1.8直接高16位传递到低16位
@@ -45,8 +75,13 @@ Collection Studying 4 -- HashMap
 
 ​       键值对数量size大于thr，桶中元素大于8时转为红黑树，小于6时转回链表
 
-11) HashMap Hashtable  concurrentHashMap
+11) HashMap   concurrentHashMap
+
+​		待看完多线程来填坑
+
 12) concurrenthashmap，cas和synchronized
+
+​		待看完多线程来填坑
 
 ```java
 package java.util;
@@ -228,6 +263,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     }
 
     
+    //get方法过程
     public V get(Object key) {
         Node<K,V> e;
         return (e = getNode(hash(key), key)) == null ? null : e.value;
@@ -236,14 +272,19 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     
     final Node<K,V> getNode(int hash, Object key) {
         Node<K,V>[] tab; Node<K,V> first, e; int n; K k;
+        //判断哈希表是否不为空 且 对应桶是否为空
         if ((tab = table) != null && (n = tab.length) > 0 &&
             (first = tab[(n - 1) & hash]) != null) {
+            //不为空检查第一个元素是否等价
             if (first.hash == hash && // always check first node
                 ((k = first.key) == key || (key != null && key.equals(k))))
                 return first;
+            //不等价，检查下一个元素
             if ((e = first.next) != null) {
+                //判断是否是红黑树形式，是则进入树形模式
                 if (first instanceof TreeNode)
                     return ((TreeNode<K,V>)first).getTreeNode(hash, key);
+                //否则遍历链表进行检索
                 do {
                     if (e.hash == hash &&
                         ((k = e.key) == key || (key != null && key.equals(k))))
