@@ -32,8 +32,6 @@ Collection Studying 4 -- HashMap
 
 ​    5) HashMap有红黑树，HashTable无该机制；
 
-
-
 5) 1.8 hashmap底层put过程  get过程
 
 ​		put
@@ -54,7 +52,7 @@ Collection Studying 4 -- HashMap
 
 ​     1）当键值对个数size大于阈值thr时，将会扩容，将容量和阈值变为原来的两倍
 
-​     2)   然后，遍历原哈希表的所有元素，并且重新哈希到新表相应的桶中
+​     2) 然后，遍历原哈希表的所有元素，并且重新哈希到新表相应的桶中
 
 ​                                <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\Collection\resize.jpg" style="zoom: 50%;" />
 
@@ -63,17 +61,19 @@ Collection Studying 4 -- HashMap
 
 ​	  待看完Mysql来填坑
 
-9) 1.8和以前有什么不一样
+9) 1.8和1.7有什么不一样
 
 ​     1）hash计算1.7四次扰动，1.8直接高16位传递到低16位
 
-​     2)   1.7采用头插法、1.8保持相对顺序采用尾插
+​     2) 1.7采用头插法、1.8保持相对顺序采用尾插
 
 ​     3）1.7采用数组+链表，1.8加入红黑树设计用来托底
 
+![](C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\Collection\hashmap1.7-1.8.jpg)
+
 10) hashmap什么时候扩容，链表什么时候转为红黑树
 
-​       键值对数量size大于thr，桶中元素大于8时转为红黑树，小于6时转回链表
+​    键值对数量size大于thr，桶中元素大于8时转为红黑树，小于6时转回链表
 
 11) HashMap   concurrentHashMap
 
