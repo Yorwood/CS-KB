@@ -32,7 +32,7 @@
 
 - redo log
 
-  MySql中对于每条更新操作，如果直接将更新记录落盘，由于是随机写所以IO开销很高，InnoDB引擎有一个日志模块redo log（**固定大小的文件**），以追加的方式追加记录到redo log中(循环写，从头到尾部，满了则擦除)，因为是**顺序写**所以IO效率高。由于记录在**更新写入内存前已经写了redo log**，因此redo log可以在数据库宕机重启后，来恢复数据，即保证crash-safe。
+  MySql中对于每条更新操作，如果直接将更新记录落盘，由于是随机写所以IO开销很高，InnoDB引擎有一个日志模块redo log（**固定大小的文件**），以追加的方式追加记录到redo log中(循环写，从头到尾部，满了则擦除)，因为是**顺序写**所以IO效率高。由于记录在**事务提交前**已经写了**redo log(持久化到磁盘)**，因此redo log可以在数据库宕机重启后，来恢复数据，即保证crash-safe。
 
   <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\redo log.png" style="zoom:50%;" />
 
@@ -54,7 +54,7 @@
 
 - 两阶段提交
 
-  对于一条更新语句，首先根据主键索引ID，找到记录行，判断当前数据页是否内存命中，未命中则进行磁盘读入，返回记录，将该记录的值进行更新，先写入redo log，redo log处于prepare标记，然后再更新内存中记录的值，写binlog，redo log标记为commit状态。
+  对于一条更新语句，首先根据主键索引ID，找到记录行，判断当前数据页是否内存命中，未命中则进行磁盘读入，返回记录，将该记录的值进行更新，**先更新内存中数据记录**(实际上分为数据页在内存的更新、不在更新两种)，将内存修改记录写入redo log，redo log处于prepare标记，写binlog，redo log标记为commit状态。
 
   <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\两阶段提交.png" style="zoom: 67%;" />
 
@@ -78,6 +78,7 @@
     4. MySQL关闭时也会将其落盘
 
   
+
   - MySQL提供了参数`innodb_flush_log_at_trx_commit`
 
      该参数有几个选项：0、1、2
@@ -86,13 +87,57 @@
 
   设置为0：每秒写一次日志并将其刷新到磁盘
 
-  设置为2：表示当你commit时，将redolog-buffer中的数据刷新进OS Cache中，然后依托于操作系统每秒刷新一次的机制将数据同步到磁盘中，也存在丢失的风险
+  设置为2：表示当你commit时，将redo log-buffer中的数据刷新进OS Cache中，然后依托于操作系统每秒刷新一次的机制将数据同步到磁盘中，也存在丢失的风险
 
   - binlog
 
     binlog也有缓存机制，也有参数设置控制一致性强弱，binlog也是顺序写文件，不过文件是追加方式，不会覆盖，因此可以做归档，而redo log会擦除而不能做归档。
 
+- redo log和binlog写入流程
+
+  - binlog写入
+    - binlog实际写入有三个过程，首先会写入内存缓存，然后通过write写入OS文件系统的page cache，最后通过fsync刷到磁盘中进行持久化，其中最后一个阶段对IOPS(每秒读写次数)影响较大。根据性能和数据持久化需求，可以根据**sync_binlog**参数来设置write和fsync行为，sync_binlog=0时，表示每次提交事务都只执行write阶段，不执行fsync；=1时，表示每次提交事务都执行fsync；=N时表示每次提交事务只执行write阶段，累计N个事务才执行fsync。第一种和第三种设置，在主机宕机时会分别丢失一些事务和N个事务。
+    - binlog要保证一个事务的binlog一起写入，因此是每个线程有自己的内存缓存，在事务提交阶段，将binlog一起写入文件系统缓存。
+
+  <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\binlog写入过程.png" style="zoom:50%;" />
+
+  - redo log写入
+
+    - redo log写入和binlog类似也有三个过程，写入内存缓存，写入文件系统page cache，写入磁盘持久化。根据参数innodb_flush_log_at_trx_commit控制写入策略，=0时表示每次事务提交时只将redo log放在内存缓存中，=1表示每次事务提交时刷新到磁盘，=2表示每次事务提交时写到文件系统page cache。
+    - 事务之间共享redo log缓存，因此事务执行过程中直接将redo log写入内存缓存(因此事务未提交时，redo log可能也会被持久化)。
+    - redo log写磁盘时机
+      - innoDB后台线程，每秒轮询将内存缓存中的redo log进行write和fsync。
+      - 内存缓存空间达到设置的大小innodb_log_buffer_size的一半时，后台线程主动写盘。
+      - 并行的其它事务提交时，顺带将内存缓存持久化。 
+
+    
+
+    ​              	   <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\redo log写入过程.png" style="zoom: 67%;" />
+
+    - group commit
+
+      - LSN(日志逻辑序列号)
+
+        LSN是单调递增的，表示已经写入的redo log总量，在redo log中(当前LSN)、内存页(内存页版本)、checkpoint(表示已经持久化的LSN，即持久化的内存页版本)上都有保存。
+
+      - 组提交
+
+        当有多个事务并发执行的时候，在prepare阶段，都将redo log写入内存缓存，因此都拿到了对应的redo log的LSN，剩下持久化过程，第一个到达的事务视为leader，当leader写盘时，此时LSN是组里事务的最大LSN，因此将当前的内存缓存进行持久化，则该组内的事务在内存缓存中的redo log被一起写入磁盘，组内事务可以直接返回。
+
+        <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\group-commit-1.png" style="zoom: 33%;" />	<img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\group-commit-2.png" style="zoom:33%;" />
+
+      <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\group-commit-3.png" style="zoom:50%;" />
+
+      为了增大上面组提交的收益，Innodb将redo log持久化阶段尽量延后放在binlog的write阶段以后进行。
+
+      <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\MySql\MySql45讲\fig\两阶段提交-细化.png" style="zoom:67%;" />
+
+      由于binlog的write和fsync也是两阶段，实质上也实现了组提交，这里略过。
+
+      
+
 - 参考资料
+
   - 《极客时间MySql45讲》
   - [谈谈传说中的redo log是什么？有啥用？ - 赐我白日梦 - 博客园 (cnblogs.com)](https://www.cnblogs.com/ZhuChangwu/p/14096575.html)
 
