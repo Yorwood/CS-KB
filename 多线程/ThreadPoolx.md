@@ -30,7 +30,7 @@
 
     - TIDYING = 2 << COUNT_BITS
 
-      当所有任务已终止，且当前ctl记录的任务数为0时，线程池变为TIDYING状态，然后执行**terminated**函数(ThreadPoolExecutor类中该函数为空，可供用户重载，进行功能扩展).
+      当所有任务已终止，且当前ctl记录的线程数为0时，线程池变为TIDYING状态，然后执行**terminated**函数(ThreadPoolExecutor类中该函数为空，可供用户重载，进行功能扩展).
 
     - TERMINATED = 3 << COUNT_BITS
 
@@ -71,7 +71,7 @@
 
     <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\多线程\executor-stage2-remove.jpg" style="zoom: 67%;" />
 
-    ​	第一阶段条件不满足，进入第二阶段，因此首先判断线程池状态是否为RUNNING(addWorker导致进入第二阶段)，如果不是RUNNING则直接进入第三阶段；否则，则是因为workerCount>= corePoolSize进入第二阶段，调用workQueue.offer将当前任务task加入阻塞队列中，阻塞队列满了或者添加失败，则进入第三阶段；否则，表示task成功被加入阻塞队列，此时需要再次判断线程池状态是否为RUNNING，不为RUNNING则需要尝试删除当前添加的task(可能无法处理该task，需要拒绝执行)，执行拒绝策略，如果当前task已经被消费则会移除失败(task已经被安全执行，无需执行拒绝策略，正常退出)；如果是RUNNING状态，则判断当前线程池是否存在线程，不存在则创建一个无当前任务的worker执行阻塞队列中的task.
+    ​	第一阶段条件不满足，进入第二阶段，因此首先判断线程池状态是否为RUNNING(addWorker导致进入第二阶段)，如果不是RUNNING则直接进入第三阶段；否则，则是因为workerCount>= corePoolSize进入第二阶段，调用**workQueue.offer**将当前任务task加入阻塞队列中，阻塞队列满了或者添加失败，则进入第三阶段；否则，表示task成功被加入阻塞队列，此时需要再次判断线程池状态是否为RUNNING，不为RUNNING则需要尝试删除当前添加的task(可能无法处理该task，需要拒绝执行)，执行拒绝策略，如果当前task已经被消费则会移除失败(task已经被安全执行，无需执行拒绝策略，正常退出)；如果是RUNNING状态，则判断当前线程池是否存在线程，不存在则创建一个无当前任务的worker执行阻塞队列中的task.
 
   - stage 3：workerCount >= corePoolSize && blockQueue is full		
 
@@ -189,7 +189,7 @@
 
   - Executors线程池种类
 
-    - FixedThreadPool 和 SingleThreadPool（允许的请求队列长度为Integer.MAX_VALUE，可能会堆积大量的请求，从而导致OOM）
+    - FixedThreadPool(corePoolSize模式) 和 SingleThreadPool（允许的请求队列长度为Integer.MAX_VALUE，可能会堆积大量的请求，从而导致OOM）
     - CachedThreadPool （允许的创建线程数量为Integer.MAX_VALUE，可能会创建大量的线程，从而导致OOM）
     
   - 线程池配置

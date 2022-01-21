@@ -84,11 +84,15 @@
 
   ​							<img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\多线程\heavy-lock.jpg" style="zoom:67%;" />
 
+  **JVM底层实现**
+  
+  每个对象Object都有一个唯一与之对应的监视器对象（objectMonitor），虚拟机会为监视对象维护两个“队列"：一个叫Entry Set（进入队列，锁池），另外一个叫Wait Set（等待队列，等待池）。Entry Set 用于存储获取对象object锁阻塞的所有线程，Wait Set用于存储执行了object.wait()/wait(long) 的线程，只有Entry Set的线程可以竞争锁，当当前持有锁的线程调用了object.notify/notifyAll，则Wait Set中的一个或全部线程会移入Entry Set锁池；**[**wait、notify、notifyAll使用前需要获得对象的对象锁synchronized**]**
+  
   **获得**
 
 ​	线程通过CAS将monitor对象中的_owner字段指向自己
 
- **释放**
+   **释放**
 
 ​	释放，同时唤醒阻塞线程
 

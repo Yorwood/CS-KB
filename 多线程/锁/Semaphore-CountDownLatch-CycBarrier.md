@@ -5,7 +5,7 @@
 <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\多线程\semaphore.jpg" style="zoom:50%;" />
 
 共享锁可以实现线程同步功能，Semaphore就是利用state来实现线程同步控制的同步工具类，通过预先设置
-state的大小，线程获取到锁则state+1，释放锁则state-1，也将这同步模式称为准许permit申请/释放，常
+state的大小，线程获取到锁则state-1，释放锁则state+1，也将这同步模式称为准许permit申请/释放，常
 用在对资源的限制访问，如数据库连接池，限流等；Semaphore并没有实现Lock工具类，因此自实现了acquire/
 release等方法供外界调用. 
 
@@ -26,7 +26,7 @@ CountDownLatch是为了解决**两类线程**之间的同步关系的同步工�
 
 <img src="C:\Users\18160\Desktop\YW\JAVA\KB\CS-KB\多线程\cyclicbarrier.jpg" style="zoom:50%;" />
 
-CyclicBarrier是为了解决线程之间同步到达后再进行下一轮操作的同步关系的同步工具，例如A、B、C线程都完成了准备工作后再进入下一阶段；初始时指定同步线程的数量count，实现了await函数，利用ReentrantLock对count进行修改独占count-1修改，判断count是否为0，不为0则阻塞在ReentrantLock生成的Condition条件trip下，直到被最后一个调用await的线程调用signalAll唤醒.
+CyclicBarrier是为了解决**线程之间同步**到达后再进行下一轮操作的同步关系的同步工具，例如A、B、C线程都完成了准备工作后再进入下一阶段；初始时指定同步线程的数量count，实现了await函数，利用ReentrantLock对count进行修改独占count-1修改，判断count是否为0，不为0则阻塞在ReentrantLock生成的Condition条件trip下，直到被最后一个调用await的线程调用signalAll唤醒.
 
 - ##### 参考资料
 
