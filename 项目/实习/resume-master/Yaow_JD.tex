@@ -1,0 +1,109 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+% !Mode:: "TeX:UTF-8"
+
+\documentclass{resume}
+\usepackage{zh_CN-Adobefonts_external} % Simplified Chinese Support using external fonts (./fonts/zh_CN-Adobe/)
+%\usepackage{zh_CN-Adobefonts_internal} % Simplified Chinese Support using system fonts
+\usepackage{linespacing_fix} % disable extra space before next section
+\usepackage{cite}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+
+\begin{document}
+\pagenumbering{gobble} % suppress displaying page number
+
+\name{姚务 }
+\centerline{求职意向: 软件研发}
+% {E-mail}{mobilephone}{homepage}
+% be careful of _ in emaill address
+\vspace{1ex}
+\contactInfo{wyao@hnu.edu.cn}{(+86) 181-6074-2652}{}
+
+
+% {E-mail}{mobilephone}
+% keep the last empty braces!
+%\contactInfo{xxx@yuanbin.me}{(+86) 131-221-87xxx}{}
+
+\vspace{-1ex}
+ 
+\section{\faGraduationCap\  教育背景}
+\datedsubsection{\textbf{湖南大学(保送)}~~ \ 硕士, 计算机科学与技术,}{2020 -- 2023}
+
+\datedsubsection{\textbf{南昌大学}~~ \ 学士, 计算机科学与技术, 排名: \nth{11}/216}{2016 -- 2020}
+\vspace{1ex}
+
+%\vspace{-1ex}
+
+\section{\faUsers\ 项目经历}
+\datedsubsection{\textbf{牛客论坛 (\href{http://159.226.40.104:18080}{http://159.226.40.104:18080})} }{2021.08 -- 2021.10}
+%\role{实习}{经理: 高富帅}
+%xxx后端开发
+\begin{itemize}
+  \item 作为 BDA Lib 核心开发者,在分布式计算框架 Spark 上实现了 CART/GBDT/GBRT/RF 算法的 分布式版本,同时完成了这些算法单机版本的开发。
+  \item 实现了 BDA Studio 中需要的数据挖掘基本组件 (包括特征索引、特征合并、特征选择、特征值 归一化、模型输出结果评分等功能),并构建真实场景的应用实例。
+\end{itemize}
+
+\vspace{-1.5ex}
+
+
+% Reference Test
+%\datedsubsection{\textbf{Paper Title\cite{zaharia2012resilient}}}{May. 2015}
+%An xxx optimized for xxx\cite{verma2015large}
+%\begin{itemize}
+%  \item main contribution
+%\end{itemize}
+
+\vspace{-1ex}
+
+
+\section{\faTrophy\ 科研竞赛}
+
+\datedline{\textit{接收 二作}~Keyword Search on Large Graphs: A Survey}{Data Sci. Eng，2020}
+\datedline{\textit{在审 一作}~一种Top-k组合有中心的关键词查询方法}{发明专利，2021}
+\begin{itemize}
+  \item 普通顶点和关键词匹配点距离重复计算 (针对关键词匹配点集合建立有序2-hop)
+\end{itemize}
+\datedline{\textit{ (\nth{33}/5096;队长)}~针对冷热读写场景的RocketMQ存储系统设计}{天池大赛-第二届云原生编程挑战赛1}
+\begin{itemize}
+  \item 断电丢失
+  \item 写放大问题
+  \item 随机读问题
+  \item 冷热读写
+\end{itemize}
+\datedline{\textit{(\nth{17}/1446;队员)}~高性能分析型查询引擎赛}{天池大赛-第三届数据库大赛创新上云性能挑战赛}
+
+\vspace{-1ex}
+
+\section{\faCogs\ 专业技能}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item 熟悉Java集合、多线程、JMM内存模型
+  \item 熟悉JVM，垃圾回收机制、类加载机制等
+  \item 熟悉关系型数据库MySql,日志、事务、索引等
+  \item 熟悉基本数据结构和常用算法
+  \item 了解Redis的数据类型、编码机制、持久化机制、主从复制、哨兵模型、集群模式等
+  \item 了解Kafka
+  \item 了解计算机网络、操作系统等
+\end{itemize}
+
+\section{\faInfo\ 其它}
+\begin{itemize}[parsep=0.5ex]
+\item CET6
+\item 两次研究生一等学业奖学金
+\item 四次本科生一等学业奖学金
+
+\end{itemize}
+
+%\section{\faInfo\ 其他}
+%% increase linespacing [parsep=0.5ex]
+%\begin{itemize}[parsep=0.5ex]
+%  \item 技术博客: http://blog.yours.me
+%  \item GitHub: https://github.com/username
+%  \item 语言: 英语 - 熟练(TOEFL xxx)
+%\end{itemize}
+
+%% Reference
+%\newpage
+%\bibliographystyle{IEEETran}
+%\bibliography{mycite}
+\end{document}

@@ -1,0 +1,115 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+% !Mode:: "TeX:UTF-8"
+
+\documentclass{resume}
+\usepackage{zh_CN-Adobefonts_external} % Simplified Chinese Support using external fonts (./fonts/zh_CN-Adobe/)
+%\usepackage{zh_CN-Adobefonts_internal} % Simplified Chinese Support using system fonts
+\usepackage{linespacing_fix} % disable extra space before next section
+\usepackage{cite}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+
+\begin{document}
+\pagenumbering{gobble} % suppress displaying page number
+
+\name{姚务 }
+\centerline{求职意向: 软件研发}
+% {E-mail}{mobilephone}{homepage}
+% be careful of _ in emaill address
+\vspace{1ex}
+\contactInfo{wyao@hnu.edu.cn}{(+86) 181-6074-2652}{}
+
+
+% {E-mail}{mobilephone}
+% keep the last empty braces!
+%\contactInfo{xxx@yuanbin.me}{(+86) 131-221-87xxx}{}
+
+\vspace{-1ex}
+ 
+\section{\faGraduationCap\  教育背景}
+\datedsubsection{\textbf{湖南大学(保送)}~~ \ 硕士, 计算机科学与技术,}{2020 -- 2023}
+
+\datedsubsection{\textbf{南昌大学}~~ \ 学士, 计算机科学与技术, 排名: \nth{11}/216}{2016 -- 2020}
+\vspace{1.2ex}
+%\vspace{-1ex}
+
+
+% Reference Test
+%\datedsubsection{\textbf{Paper Title\cite{zaharia2012resilient}}}{May. 2015}
+%An xxx optimized for xxx\cite{verma2015large}
+%\begin{itemize}
+%  \item main contribution
+%\end{itemize}
+
+
+
+\section{\faTrophy\ 科研竞赛}
+
+\datedline{\textit{接收 二作}~Keyword Search on Large Graphs: A Survey}{Data Sci. Eng，2020}
+\datedline{\textit{在审 一作}~一种Top-k组合有中心的关键词查询方法}{发明专利，2021}
+\begin{itemize}
+  \item 普通顶点和关键词匹配点距离重复计算 (针对关键词匹配点集合建立有序2-hop)
+\end{itemize}
+\datedline{\textit{ (\nth{33}/5096;队长)}~针对冷热读写场景的RocketMQ存储系统设计}{天池大赛-第二届云原生编程挑战赛1}
+\begin{itemize}
+  \item 断电丢失
+  \item 写放大问题
+  \item 随机读问题
+  \item 冷热读写
+\end{itemize}
+\datedline{\textit{(\nth{17}/1446;队员)}~高性能分析型查询引擎赛}{天池大赛-第三届数据库大赛创新上云性能挑战赛}
+
+\vspace{1.2ex}
+
+\section{\faSitemap\ 实习经历}
+\datedsubsection{\textbf{哔哩哔哩~主站产研中心~/~平台技术部~/~开发实习生}}{2021.01 -- 2022.04}
+\vspace{-0.5ex}
+%\role{\LaTeX, Python}{个人项目}
+\begin{onehalfspacing}
+%优雅的 \LaTeX\ 简历模板, https://github.com/billryan/resume
+\begin{itemize}
+  \item 完成专车调度系统开发、测试并上线，实现对城市各区域专车供需不平衡状态的动态调整。
+  \item 公司数据传输和路由中间件
+\end{itemize}
+\end{onehalfspacing}
+
+\vspace{1.2ex}
+
+\section{\faUsers\ 项目经历}
+\datedsubsection{\textbf{RPC (\href{http://159.226.40.104:18080}{http://159.226.40.104:18080})} }{2022.02 -- 2022.03}
+%\role{实习}{经理: 高富帅}
+%xxx后端开发
+\begin{itemize}
+  \item 客户端的调用实现：通过动态代理实现客户端对远程方法的调用;
+  \item 自定义传输协议(数据包的传输格式)：魔数(标识自定义协议包)+包类型(标识请求还是响应)+序列化器编号(标识序列化器的类型)+数据长度(防止粘包)+序列化后的实际数据；
+  \item 序列化实现：实现多种序列化格式(Json、Kryo、Protobuf和Hessian),以"插拔"方式选择使用；
+  \item 注册中心：使用Nacos作为注册中心，管理相关服务，如负载均衡;
+  \item 网络通信：使用基于NIO的Netty进行网络通信;
+\end{itemize}
+
+\vspace{1.2ex}
+
+
+\section{\faCogs\ 专业技能}
+% increase linespacing [parsep=0.5ex]
+\begin{itemize}[parsep=0.5ex]
+  \item 熟悉Java集合、多线程、JMM内存模型
+  \item 熟悉JVM，垃圾回收机制、类加载机制等
+  \item 熟悉关系型数据库MySql,日志、事务、索引等
+  \item 熟悉基本数据结构和常用算法
+  \item 了解Redis的数据类型、编码机制、持久化机制、主从复制、哨兵模型、集群模式等
+\end{itemize}
+
+\vspace{1.2ex}
+\section{\faInfo\ 其它}
+\begin{itemize}[parsep=0.5ex]
+\item CET6
+\item 两次研究生一等学业奖学金
+\item 三次本科生一等学业奖学金
+\item 2018年全国大学生数学建模竞赛省二等奖
+\item 2019年全国大学生蓝桥杯C++A组省二等奖
+\item 2019年团体程序设计天梯赛江西省团体一等奖
+
+\end{itemize}
+
+\end{document}
